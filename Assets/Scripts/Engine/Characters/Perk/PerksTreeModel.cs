@@ -72,13 +72,13 @@ public class PerksTreeModel
 
     //check for the perk with specific type level
     // check for the perk with specific type level
-    public bool HasPerk(PerksEnum perkType, int level = 1)
+    public bool HasPerk(string perkID, int level = 1)
     {
         // iterate through all perks
         foreach (var perk in PerkStates)
         {
             // check if the perk has the same type and level
-            if (perk.Key.PerkType == perkType && perk.Key.Level == level && perk.Value == PerkStateEnum.Purchased)
+            if (perk.Key.uID == perkID && perk.Key.Level == level && perk.Value == PerkStateEnum.Purchased)
             {
                 // return true
                 return true;

@@ -1,14 +1,13 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 
 [CreateAssetMenu(menuName = "Perks/Perk")]
-public class PerkScriptable : SerializedScriptableObject
+public class PerkScriptable : SerializedScriptableObjectWithID
 {
-    //enum to store the type of perk
-    public PerksEnum PerkType;
+    //property PerkType is a wrapper for the ID
+    public string PerkType { get { return uID; } set { uID = value; } }
 
     //Level of the perk in chain
     [Sirenix.OdinInspector.ReadOnly]
@@ -39,6 +38,5 @@ public class PerkScriptable : SerializedScriptableObject
 
         //return true
         return true;
-    }
-    
+    }    
 }
