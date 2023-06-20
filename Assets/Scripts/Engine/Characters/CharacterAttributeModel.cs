@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterStatModel
+public class CharacterAttributeModel
 {
     //type
-    public CharacterStatsEnum StatType;
+    public string AttributeType;
 
     //value
     public int Value;

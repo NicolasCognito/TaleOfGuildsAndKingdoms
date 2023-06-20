@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
+using System.IO;
+using Newtonsoft.Json.Linq;
 
 [CreateAssetMenu(menuName = "Perks/Perk")]
 public class PerkScriptable : SerializedScriptableObjectWithID
@@ -21,7 +23,7 @@ public class PerkScriptable : SerializedScriptableObjectWithID
     [OdinSerialize, ShowInInspector]
     public List<PerkCondition> Conditions = new List<PerkCondition>();
 
-    public List<PerkTagsEnum> Tags;
+    public List<string> Tags;
 
     public bool ConditionsMet(CharacterModel character)
     {
@@ -38,5 +40,25 @@ public class PerkScriptable : SerializedScriptableObjectWithID
 
         //return true
         return true;
-    }    
+    }
+
+    private void OnValidate()
+    {
+        // Read the JSON file
+        string json = File.ReadAllText("Assets/Scripts/GameData/Perks/PerkTags.json");
+
+        // Parse the JSON file
+        JObject jsonObject = JObject.Parse(json);
+        JArray jsonTags = (JArray)jsonObject["tags"];
+        List<string> tagsFromFile = jsonTags.ToObject<List<string>>();
+
+        // Check if the tags in the PerkScriptable are listed in the file
+        foreach (string tag in Tags)
+        {
+            if (!tagsFromFile.Contains(tag))
+            {
+                Debug.LogError("Tag " + tag + " in PerkScriptable " + PerkType + " is not listed in the file.");
+            }
+        }
+    } 
 }
