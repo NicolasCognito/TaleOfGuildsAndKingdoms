@@ -55,15 +55,6 @@ public class CharacterGeneratorScriptable : SerializedScriptableObject
     [OdinSerialize, ShowInInspector]
     private List<AttributeGenerator> AttributeGenerators = new List<AttributeGenerator>();
 
-    //list of names and second names
-    [ListDrawerSettings]
-    [OdinSerialize, ShowInInspector]
-    public List<string> Names = new List<string>();
-
-    [ListDrawerSettings]
-    [OdinSerialize, ShowInInspector]
-    public List<string> SecondNames = new List<string>();
-
     //reference to the PerkTreeGeneratorScriptable
     public PerkTreeGeneratorScriptable PerkTreeGenerator;
 

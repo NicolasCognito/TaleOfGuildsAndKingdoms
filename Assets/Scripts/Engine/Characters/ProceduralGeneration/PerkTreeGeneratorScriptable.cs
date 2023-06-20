@@ -62,7 +62,7 @@ public class PerkTreeGeneratorScriptable : SerializedScriptableObject
 
 
 
-        PerksTreeModel newTreeModel = new PerksTreeModel(perks, perkChains);
+        PerksTreeModel newTreeModel = new PerksTreeModel(perkChains);
         return newTreeModel;
     }
 }
