@@ -5,7 +5,7 @@ using UnityEngine;
 public class PerkConditionLevel : PerkCondition
 {
     //perk type to check
-    public PerksEnum PerkType;
+    public string PerkType;
 
     public int Level;
 
@@ -23,7 +23,7 @@ public class PerkConditionLevel : PerkCondition
     }
 
     //constructor
-    public PerkConditionLevel(PerksEnum perkType, int level, bool inversed = false) : base()
+    public PerkConditionLevel(string perkType, int level, bool inversed = false) : base()
     {
         //set the perk type
         PerkType = perkType;

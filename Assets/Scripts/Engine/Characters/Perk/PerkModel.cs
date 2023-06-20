@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class PerkModel
 {
-    //enum to store the type of perk
-    public PerksEnum PerkType;
 
     //Level of the perk in chain
     //1 by default, make immutable in inspector
@@ -21,9 +19,7 @@ public class PerkModel
 
     public PerkModel(PerkScriptable perkScriptable)
     {
-        //set the perk type
-        PerkType = perkScriptable.PerkType;
-
+        
         //set the level
         Level = perkScriptable.Level;
 
