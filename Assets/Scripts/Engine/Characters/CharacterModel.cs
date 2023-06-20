@@ -12,39 +12,21 @@ public class CharacterModel : IEntity
 
 
     //stats dictionary
-    public Dictionary<CharacterStatsEnum, CharacterStatModel> Stats { get; set; }
-
-    /*/get faction based on subclass of character
-    private FactionModel GetFactionModel()
-    {
-        //check if the character is a GuildMember
-        if (this is GuildMemberModel)
-        {
-            //return the guild faction
-            return FactionModel.Guild;
-        }
-
-        //check if the character is a KingdomMember
-        if (this is KingdomMemberModel)
-        {
-            //return the kingdom faction
-            return FactionModel.Kingdom;
-        }
-    }*/
+    public Dictionary<string, CharacterAttributeModel> Attributes { get; set; }
 
     //constructor
-    public CharacterModel(PerksTreeModel perksTree, List<CharacterStatModel> stats)
+    public CharacterModel(PerksTreeModel perksTree, List<CharacterAttributeModel> attributes)
     {
         //
 
         //create the stats dictionary
-        Stats = new Dictionary<CharacterStatsEnum, CharacterStatModel>();
+        Attributes = new Dictionary<string, CharacterAttributeModel>();
 
         //loop through the stats
-        foreach (CharacterStatModel stat in stats)
+        foreach (CharacterAttributeModel attribute in attributes)
         {
             //add the stat to the dictionary
-            Stats.Add(stat.StatType, stat);
+            Attributes.Add(attribute.AttributeType, attribute);
         }
 
         //create the perks tree model

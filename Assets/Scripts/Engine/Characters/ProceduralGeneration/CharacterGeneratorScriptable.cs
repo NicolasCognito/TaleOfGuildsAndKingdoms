@@ -23,12 +23,12 @@ public class CharacterGeneratorScriptable : SerializedScriptableObject
     private int PerksMax;
     */
 
-    //stat generator class
+    //Attribute generator class
     [System.Serializable]
-    private class StatGenerator
+    private class AttributeGenerator
     {
-        //stat type
-        public CharacterStatsEnum StatType;
+        //Attribute type
+        public string AttributeType;
 
         //min value
         public int MinValue;
@@ -37,15 +37,15 @@ public class CharacterGeneratorScriptable : SerializedScriptableObject
         public int MaxValue;
     }
 
-    private class StatOutputModel : OutputModel
+    private class AttributeOutputModel : OutputModel
     {
-        public CharacterStatModel Stat { get; }
-        public StatGenerator Generator { get; }
+        public CharacterAttributeModel Attribute { get; }
+        public AttributeGenerator Generator { get; }
 
-        public StatOutputModel(CharacterStatModel stat, StatGenerator generator) 
-            : base(generator.StatType.ToString(), generator.MaxValue - stat.Value + 1)
+        public AttributeOutputModel(CharacterAttributeModel attribute, AttributeGenerator generator) 
+            : base(generator.AttributeType.ToString(), generator.MaxValue - attribute.Value + 1)
         {
-            Stat = stat;
+            Attribute = attribute;
             Generator = generator;
         }
     }
@@ -53,7 +53,7 @@ public class CharacterGeneratorScriptable : SerializedScriptableObject
     //list of stat generators
     [ListDrawerSettings]
     [OdinSerialize, ShowInInspector]
-    private List<StatGenerator> StatGenerators = new List<StatGenerator>();
+    private List<AttributeGenerator> AttributeGenerators = new List<AttributeGenerator>();
 
     //list of names and second names
     [ListDrawerSettings]
@@ -70,37 +70,37 @@ public class CharacterGeneratorScriptable : SerializedScriptableObject
     //generation process
     public CharacterModel GenerateCharacter()
     {
-        //let's roll the attribute points
+        // Let's roll the attribute points
         int attributePoints = Random.Range(AttributePointsMin, AttributePointsMax);
 
-        //set all stats to minimum value then distribute the points pseudo-randomly
-        List<CharacterStatModel> stats = new List<CharacterStatModel>();
+        // Set all attributes to minimum value then distribute the points pseudo-randomly
+        List<CharacterAttributeModel> attributes = new List<CharacterAttributeModel>();
 
-        //iterate through the stat generators
-        foreach (StatGenerator statGenerator in StatGenerators)
+        // Iterate through the attribute generators
+        foreach (AttributeGenerator attributeGenerator in AttributeGenerators)
         {
-            //create a new stat model
-            CharacterStatModel stat = new CharacterStatModel();
+            // Create a new attribute model
+            CharacterAttributeModel attribute = new CharacterAttributeModel();
 
-            //set the stat type
-            stat.StatType = statGenerator.StatType;
+            // Set the attribute type
+            attribute.AttributeType = attributeGenerator.AttributeType;
 
-            //set the value to minimum
-            stat.Value = statGenerator.MinValue;
+            // Set the value to minimum
+            attribute.Value = attributeGenerator.MinValue;
 
-            //add the stat to the list
-            stats.Add(stat);
+            // Add the attribute to the list
+            attributes.Add(attribute);
         }
 
-        // Create a list of output models based on stats and generators
+        // Create a list of output models based on attributes and generators
         List<OutputModel> outputs = new List<OutputModel>();
-        foreach (StatGenerator statGenerator in StatGenerators)
+        foreach (AttributeGenerator attributeGenerator in AttributeGenerators)
         {
-            // Assuming you have a GetStat method to get a stat model from the list by its type
-            CharacterStatModel stat = GetStat(stats, statGenerator.StatType);
+            // Assuming you have a GetAttribute method to get an attribute model from the list by its type
+            CharacterAttributeModel attribute = GetAttribute(attributes, attributeGenerator.AttributeType);
 
-            // Create a new output model for this stat and generator
-            outputs.Add(new StatOutputModel(stat, statGenerator));
+            // Create a new output model for this attribute and generator
+            outputs.Add(new AttributeOutputModel(attribute, attributeGenerator));
         }
 
         while (attributePoints > 0)
@@ -108,45 +108,44 @@ public class CharacterGeneratorScriptable : SerializedScriptableObject
             // Update probabilities
             foreach (OutputModel output in outputs)
             {
-                StatOutputModel statOutput = output as StatOutputModel;
-                statOutput.Probability = statOutput.Generator.MaxValue - statOutput.Stat.Value + 1;
+                AttributeOutputModel attributeOutput = output as AttributeOutputModel;
+                attributeOutput.Probability = attributeOutput.Generator.MaxValue - attributeOutput.Attribute.Value + 1;
             }
 
             // Make a weighted random selection from the output models
-            StatOutputModel selectedOutput = (StatOutputModel)SaveThrow.Throw(outputs);
+            AttributeOutputModel selectedOutput = (AttributeOutputModel)SaveThrow.Throw(outputs);
 
-            // Increase the value of the selected stat
-            selectedOutput.Stat.Value++;
+            // Increase the value of the selected attribute
+            selectedOutput.Attribute.Value++;
 
             // Decrement attribute points
             attributePoints--;
         }
 
-        //once the stats are generated, let's generate the perks
-        //call corresponding method from the PerkTreeGeneratorScriptable
+        // Once the attributes are generated, let's generate the perks
+        // Call corresponding method from the PerkTreeGeneratorScriptable
         PerksTreeModel perksTree = PerkTreeGenerator.GeneratePerkTreeModel(this);
 
-        //create a new character model
-        CharacterModel character = new CharacterModel(perksTree, stats);
+        // Create a new character model
+        CharacterModel character = new CharacterModel(perksTree, attributes);
 
-        //return the character
+        // Return the character
         return character;
     }
 
-    //function to roll specific perk chain and 
-
-    // Function to get a stat from the list by its type
-    CharacterStatModel GetStat(List<CharacterStatModel> stats, CharacterStatsEnum type)
+    // Function to get an attribute from the list by its type
+    CharacterAttributeModel GetAttribute(List<CharacterAttributeModel> attributes, string type)
     {
-        foreach (CharacterStatModel stat in stats)
+        foreach (CharacterAttributeModel attribute in attributes)
         {
-            if (stat.StatType == type)
+            if (attribute.AttributeType == type)
             {
-                return stat;
+                return attribute;
             }
         }
 
-        return null; // Return null if no stat of the given type is found
+        // If no attribute was found, throw an exception
+        throw new System.Exception("Attribute not found: " + type);
     }
 
 

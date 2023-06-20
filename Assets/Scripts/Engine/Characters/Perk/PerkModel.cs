@@ -15,7 +15,7 @@ public class PerkModel
 
     public List<PerkCondition> Conditions;
 
-    public List<PerkTagsEnum> Tags;
+    public List<string> Tags;
 
     public PerkModel(PerkScriptable perkScriptable)
     {
