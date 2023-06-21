@@ -19,54 +19,33 @@ public class PerksTreeModel
         Deactivated
     }
 
-    //dictionary contains all perks and their states
-    private Dictionary<PerkScriptable, PerkStateEnum> PerkStates = new Dictionary<PerkScriptable, PerkStateEnum>();
-
     //list of all perk chains
-    private List<PerkChainScriptable> PerkChains = new List<PerkChainScriptable>();
+    //used when rebuilding the perk tree for some reason
+    private List<PerkChainScriptable> perkChains = new List<PerkChainScriptable>();
     
     //private dictionary contains all perks as models in keys and their states as values
-    private Dictionary<PerkModel, PerkStateEnum> PerkModels = new Dictionary<PerkModel, PerkStateEnum>();
+    private Dictionary<PerkModel, PerkStateEnum> perks = new Dictionary<PerkModel, PerkStateEnum>();
 
-    //convert one dictionary to another
-    private void ConvertPerkScriptableToPerkModel()
-    {
-        //clear the dictionary
-        PerkModels.Clear();
-
-        //iterate through all perks
-        foreach (var perk in PerkStates)
-        {
-            //create new perk model
-            var perkModel = new PerkModel(perk.Key);
-
-            //add the perk model to the dictionary
-            PerkModels.Add(perkModel, perk.Value);
-        }
-    }
+    
 
     //constructor takes list of perks and perk chains
-    public PerksTreeModel(List<PerkScriptable> perks, List<PerkChainScriptable> perkChains)
+    public PerksTreeModel(List<PerkChainScriptable> perkChains)
     {
-        //iterate through all perks
-        foreach (var perk in perks)
-        {
-            //add the perk to the dictionary
-            PerkStates.Add(perk, PerkStateEnum.Locked);
-        }
+        //set the perk chains
+        this.perkChains = perkChains;
 
-        //iterate through all perk chains
+        //loop through the perk chains, convert content to models and add to the dictionary
         foreach (var perkChain in perkChains)
         {
-            //iterate through all perks in the perk chain
+            //loop through the perks
             foreach (var perk in perkChain.PerkChain)
             {
-                //add the perk to the dictionary
-                PerkStates.Add(perk, PerkStateEnum.Locked);
-            }
+                //create the perk model
+                var perkModel = new PerkModel(perk);
 
-            //add the perk chain to the list
-            PerkChains.Add(perkChain);
+                //add the perk to the dictionary
+                perks.Add(perkModel, PerkStateEnum.Locked);
+            }
         }
     }
 
@@ -75,10 +54,10 @@ public class PerksTreeModel
     public bool HasPerk(string perkID, int level = 1)
     {
         // iterate through all perks
-        foreach (var perk in PerkStates)
+        foreach (var perk in perks)
         {
             // check if the perk has the same type and level
-            if (perk.Key.uID == perkID && perk.Key.Level == level && perk.Value == PerkStateEnum.Purchased)
+            if (perk.Key.PerkType == perkID && perk.Key.Level == level && perk.Value == PerkStateEnum.Purchased)
             {
                 // return true
                 return true;
@@ -92,28 +71,65 @@ public class PerksTreeModel
     public void UpdatePerkStates(CharacterModel character)
     {
         //create new dictionary
-        var newPerkStates = new Dictionary<PerkScriptable, PerkStateEnum>();
+        var newPerkStates = new Dictionary<PerkModel, PerkStateEnum>();
 
-        //iterate through all perks
-        foreach (var perk in PerkStates)
+        //loop through the perks, perform actions based on their states
+        //if purchased, add to the new dictionary with the same state
+        //if locked or unlocked, check the conditions and add to the new dictionary with the new state
+        foreach (var perk in perks)
         {
-            //if not purchased, check condition
-            if (perk.Value != PerkStateEnum.Purchased)
+            //check the state
+            switch (perk.Value)
             {
-                //check if the conditions are met
-                if (perk.Key.ConditionsMet(character))
-                {
-                    //add the perk to the dictionary
-                    newPerkStates.Add(perk.Key, PerkStateEnum.Unlocked);
-                }
-                else
-                {
-                    //add the perk to the dictionary
-                    newPerkStates.Add(perk.Key, PerkStateEnum.Locked);
-                }
+                //if purchased, add to the new dictionary with the same state
+                case PerkStateEnum.Purchased:
+                    newPerkStates.Add(perk.Key, perk.Value);
+                    break;
+                //if locked or unlocked, check the conditions and add to the new dictionary with the new state
+                case PerkStateEnum.Locked:
+                case PerkStateEnum.Unlocked:
+                    //check the conditions
+                    if (perk.Key.ConditionsMet(character))
+                    {
+                        //add to the new dictionary with the new state
+                        newPerkStates.Add(perk.Key, PerkStateEnum.Unlocked);
+                    }
+                    else
+                    {
+                        //add to the new dictionary with the new state
+                        newPerkStates.Add(perk.Key, PerkStateEnum.Locked);
+                    }
+                    break;
+                //if deactivated, add to the new dictionary with the same state
+                case PerkStateEnum.Deactivated:
+                    newPerkStates.Add(perk.Key, perk.Value);
+                    break;
+                //by default throw an exception
+                default:
+                    throw new System.Exception("Unknown perk state");
             }
         }
+
+        
     }
 
+    //purchase the perk (for now for free)
+    public void PurchasePerk(PerkModel perk, CharacterModel character)
+    {
+        //check if the perk is unlocked
+        if (perks[perk] == PerkStateEnum.Unlocked)
+        {
+            //set the state to purchased
+            perks[perk] = PerkStateEnum.Purchased;
+
+            //update the perk states
+            UpdatePerkStates(character);
+        }
+        else
+        {
+            //throw an exception
+            throw new System.Exception("Perk is not unlocked");
+        }
+    }
 }
 

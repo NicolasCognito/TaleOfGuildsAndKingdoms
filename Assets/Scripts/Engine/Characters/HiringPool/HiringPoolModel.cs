@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
 
-public class HiringPool
+public class HiringPoolModel
 {
-    public List<HiringPoolUnit> Heroes { get; private set; }
+    public List<HiringPoolCharacterModel> Heroes { get; private set; }
 
-    public HiringPool()
+    public HiringPoolModel()
     {
-        Heroes = new List<HiringPoolUnit>();
+        Heroes = new List<HiringPoolCharacterModel>();
     }
 
     public void EndTurn()
@@ -54,12 +54,12 @@ public class HiringPool
         return factionsWithHighestBid.Count > 1;
     }
 
-    private void ResetTurnsBeforeDecision(HiringPoolUnit hero)
+    private void ResetTurnsBeforeDecision(HiringPoolCharacterModel hero)
     {
         hero.TurnsBeforeDecision = 1;
     }
 
-    private void HireHeroToHighestBidder(GuildModel faction, HiringPoolUnit hero)
+    private void HireHeroToHighestBidder(GuildModel faction, HiringPoolCharacterModel hero)
     {
         faction.Hire(hero.Hero);
         Heroes.Remove(hero);

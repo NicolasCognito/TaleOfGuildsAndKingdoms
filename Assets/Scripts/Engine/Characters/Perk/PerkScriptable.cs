@@ -6,8 +6,11 @@ using System.IO;
 using Newtonsoft.Json.Linq;
 
 [CreateAssetMenu(menuName = "Perks/Perk")]
-public class PerkScriptable : SerializedScriptableObjectWithID
+public class PerkScriptable : SerializedScriptableObject
 {
+    //ID of the perk
+    private string uID;
+
     //property PerkType is a wrapper for the ID
     public string PerkType { get { return uID; } set { uID = value; } }
 
@@ -25,27 +28,12 @@ public class PerkScriptable : SerializedScriptableObjectWithID
 
     public List<string> Tags;
 
-    public bool ConditionsMet(CharacterModel character)
-    {
-        //check if the conditions are met
-        foreach (PerkCondition condition in Conditions)
-        {
-            //check if the condition is met
-            if (!condition.CheckCondition(character))
-            {
-                //return false
-                return false;
-            }
-        }
-
-        //return true
-        return true;
-    }
+    
 
     private void OnValidate()
     {
         // Read the JSON file
-        string json = File.ReadAllText("Assets/Scripts/GameData/Perks/PerkTags.json");
+        string json = File.ReadAllText("Assets/Resources/Perks/PerkTags.json");
 
         // Parse the JSON file
         JObject jsonObject = JObject.Parse(json);

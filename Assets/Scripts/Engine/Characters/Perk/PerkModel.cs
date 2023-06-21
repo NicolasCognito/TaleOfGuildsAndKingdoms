@@ -5,6 +5,9 @@ using UnityEngine;
 public class PerkModel
 {
 
+    //ID of the perk
+    public string PerkType { get; set; }
+
     //Level of the perk in chain
     //1 by default, make immutable in inspector
     [Sirenix.OdinInspector.ReadOnly]
@@ -17,8 +20,27 @@ public class PerkModel
 
     public List<string> Tags;
 
+    public bool ConditionsMet(CharacterModel character)
+    {
+        //check if the conditions are met
+        foreach (PerkCondition condition in Conditions)
+        {
+            //check if the condition is met
+            if (!condition.CheckCondition(character))
+            {
+                //return false
+                return false;
+            }
+        }
+
+        //return true
+        return true;
+    }
+
     public PerkModel(PerkScriptable perkScriptable)
     {
+        //set the ID
+        PerkType = perkScriptable.PerkType;
         
         //set the level
         Level = perkScriptable.Level;

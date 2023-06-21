@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HiringPoolUnit
+public class HiringPoolCharacterModel
 {
     //hero model
     public CharacterModel Hero { get; set; }

@@ -16,6 +16,7 @@ public class PerkChainScriptable : SerializedScriptableObjectWithID
     [InlineEditor]
     public List<PerkScriptable> PerkChain { get; set; } = new List<PerkScriptable>();
 
+
     private void OnValidate()
     {
         for (int i = 0; i < PerkChain.Count; i++)
