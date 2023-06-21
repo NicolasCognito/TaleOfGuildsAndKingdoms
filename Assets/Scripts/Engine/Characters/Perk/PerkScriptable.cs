@@ -33,7 +33,7 @@ public class PerkScriptable : SerializedScriptableObject
     private void OnValidate()
     {
         // Read the JSON file
-        string json = File.ReadAllText("Assets/Scripts/GameData/Perks/PerkTags.json");
+        string json = File.ReadAllText("Assets/Resources/Perks/PerkTags.json");
 
         // Parse the JSON file
         JObject jsonObject = JObject.Parse(json);

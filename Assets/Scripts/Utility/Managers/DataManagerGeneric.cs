@@ -6,6 +6,13 @@ public class DataManager<T> where T : SerializedScriptableObjectWithID
 {
     private Dictionary<string, T> dataDictionary = new Dictionary<string, T>();
 
+    public void Load(string path)
+    {
+        // This will load all assets of type T from "SomeDirectory" and its subdirectories.
+        T[] dataItems = Resources.LoadAll<T>(path);
+        Initialize(dataItems);
+    }
+
     public void Initialize(IEnumerable<T> dataItems)
     {
         foreach (var item in dataItems)
@@ -32,5 +39,11 @@ public class DataManager<T> where T : SerializedScriptableObjectWithID
             Debug.LogWarning($"Data with ID {id} not found");
             return null;
         }
+    }
+
+    //constructor with load method
+    public DataManager(string path)
+    {
+        Load(path);
     }
 }

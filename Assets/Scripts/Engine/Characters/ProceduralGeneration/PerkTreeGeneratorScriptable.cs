@@ -52,15 +52,17 @@ public class PerkTreeGeneratorScriptable : SerializedScriptableObject
     // This method generates a PerkTreeModel based on the perk and chain chances
     public PerksTreeModel GeneratePerkTreeModel(CharacterGeneratorScriptable character)
     {
-
-        
-        //int perkChainsCount, perksCount = 0;
-
-        //lets create two new lists, one for perks and one for perk chains
-        List<PerkScriptable> perks = new List<PerkScriptable>();
+        // List of perk chains to be added to the PerkTreeModel
         List<PerkChainScriptable> perkChains = new List<PerkChainScriptable>();
 
-
+        //for each perk chain roll a random number and if it's greater than the chance, add it to the list
+        foreach (PerkChainGenerator chainGenerator in PerkChainChances)
+        {
+            if (Random.Range(0, 100) < chainGenerator.Chance)
+            {
+                perkChains.Add(chainGenerator.PerkChain);
+            }
+        }
 
         PerksTreeModel newTreeModel = new PerksTreeModel(perkChains);
         return newTreeModel;

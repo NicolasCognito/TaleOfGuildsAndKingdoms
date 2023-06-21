@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 862d759a66327fb4784117f04f8f6dc8, type: 3}
-  m_Name: Warrior
+  m_Name: WarriorChain
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -19,9 +19,6 @@ MonoBehaviour:
     - {fileID: 11400000, guid: af40936ded3ab85449d1b3aeb70eb906, type: 2}
     - {fileID: 11400000, guid: 4686f0799bcb4934daef675dec54daa2, type: 2}
     - {fileID: 11400000, guid: afaed1852ef10a54e845119203657a37, type: 2}
-    - {fileID: 11400000, guid: 61daf0f731390164385e1e86cd929b68, type: 2}
-    - {fileID: 11400000, guid: d1070c034a67b79458956a6611e54300, type: 2}
-    - {fileID: 11400000, guid: 06241811aa6b7eb42b992e959fade1db, type: 2}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -33,7 +30,7 @@ MonoBehaviour:
         mscorlib
     - Name: 
       Entry: 12
-      Data: 6
+      Data: 3
     - Name: 
       Entry: 10
       Data: 0
@@ -43,15 +40,6 @@ MonoBehaviour:
     - Name: 
       Entry: 10
       Data: 2
-    - Name: 
-      Entry: 10
-      Data: 3
-    - Name: 
-      Entry: 10
-      Data: 4
-    - Name: 
-      Entry: 10
-      Data: 5
     - Name: 
       Entry: 13
       Data: 
