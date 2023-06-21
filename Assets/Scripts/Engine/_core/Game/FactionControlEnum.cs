@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RitualModel : IEntity
+public enum FactionControlEnum
 {
-
+    Player,
+    AI,
+    RemotePlayer
 }

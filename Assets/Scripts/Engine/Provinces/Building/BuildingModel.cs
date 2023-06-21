@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class BuildingModel : IEntity
 {
-    public virtual List<BuildingTag> DefaultTags { get; set; }
+    public virtual List<string> DefaultTags { get; set; }
 
     public abstract bool ConstructionCondition();
 

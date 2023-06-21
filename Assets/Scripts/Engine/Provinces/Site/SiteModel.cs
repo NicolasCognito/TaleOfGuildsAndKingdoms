@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class SiteModel : IEntity
 {
-    private List<BuildingEnum> _availableBuildings;
+    private List<string> _availableBuildings;
 
     private BuildingModel _building;
 
@@ -14,14 +14,8 @@ public class SiteModel : IEntity
     //methods
 
     //build something
-    public void ConstructBuilding(BuildingEnum buildingType)
+    public void ConstructBuilding(string buildingType)
     {
-        if (BuildingDictionary.dictionary.TryGetValue(buildingType, out BuildingInfo buildingInfo))
-        {
-            //call constructor delegate from BuildingInfo
-            _building = BuildingInfo.constructor();
-        }
-
-        throw new ArgumentException($"BuildingEnum {buildingType} is not registered.");
+        
     }
 }
