@@ -4,7 +4,7 @@ using UnityEngine;
 
 public static class GamePhasesManager
 {
-    private static EventQueue eventQueue;
+    private static EventQueueGlobal eventQueue;
 
     public static void StartPlanningPhase()
     {
@@ -21,7 +21,7 @@ public static class GamePhasesManager
         // Perform any necessary initialization for the active phase
 
         // Example: Create an instance of EventQueue
-        eventQueue = new EventQueue();
+        eventQueue = new EventQueueGlobal();
 
         // Example: Add events to the event queue based on player decisions or game state
         

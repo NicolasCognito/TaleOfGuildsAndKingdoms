@@ -3,6 +3,10 @@ using System.Linq;
 
 public class HiringPoolModel
 {
+    //desired amount of heroes in hiring pool
+    public int DesiredAmountOfHeroes { get; set; }
+
+    //list of heroes in hiring pool
     public List<HiringPoolCharacterModel> Heroes { get; private set; }
 
     public HiringPoolModel()
@@ -61,7 +65,25 @@ public class HiringPoolModel
 
     private void HireHeroToHighestBidder(GuildModel faction, HiringPoolCharacterModel hero)
     {
-        faction.Hire(hero.Hero);
         Heroes.Remove(hero);
     }
+
+    //populate hiring pool with randomly generated heroes
+    /*
+    public void PopulateHiringPool(int numberOfHeroes)
+    {
+        for (int i = 0; i < numberOfHeroes; i++)
+        {
+            var hero = CharacterGenerator.GenerateCharacter();
+            var bids = new Dictionary<GuildModel, int>();
+            var biddingFactions = new List<GuildModel>();
+            var minimalBid = 0;
+            var turnsBeforeDecision = 3;
+
+            var hiringPoolCharacter = new HiringPoolCharacterModel(hero, bids, biddingFactions, minimalBid, turnsBeforeDecision);
+
+            Heroes.Add(hiringPoolCharacter);
+        }
+    }
+    */
 }

@@ -8,5 +8,5 @@ public class BuildingScriptableObject : ScriptableObject
 {
     public string Name;
 
-    public List<CardEnum> AssociatedCards;
+    public List<string> AssociatedCards;
 }
