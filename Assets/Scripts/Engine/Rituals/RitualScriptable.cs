@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;
 
@@ -8,11 +9,11 @@ using UnityEngine;
 public class RitualScriptable : SerializedScriptableObjectWithID
 {
     //strategy of ritual
-    [OdinSerialize]
+    [OdinSerialize, InlineEditor]
     public RitualStrategy Strategy { get; set; }
 
     //list of slots
-    [OdinSerialize]
+    [OdinSerialize, ListDrawerSettings(Expanded = true), InlineEditor]
     public List<SlotGenericScriptable<IEntity, RitualModel>> Slots { get; set; }
 
     //constructor
