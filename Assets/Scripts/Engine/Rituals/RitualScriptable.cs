@@ -1,13 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
+using Sirenix.Serialization;
 using UnityEngine;
 
+//serialize with Odin
 [CreateAssetMenu(fileName = "New Ritual", menuName = "Rituals/Ritual")]
-public abstract class RitualScriptable : SerializedScriptableObjectWithID
+public class RitualScriptable : SerializedScriptableObjectWithID
 {
-    //list of slots
-    public List<Slot<IEntity, RitualModel>> Slots { get; set; }
-    public abstract bool Condition(params object[] args);
+    //strategy of ritual
+    [OdinSerialize]
+    public RitualStrategy Strategy { get; set; }
 
-    public abstract void Execute(params object[] args);
+    //list of slots
+    [OdinSerialize]
+    public List<SlotGenericScriptable<IEntity, RitualModel>> Slots { get; set; }
+
+    //constructor
+    public RitualScriptable()
+    {
+        Slots = new List<SlotGenericScriptable<IEntity, RitualModel>>();
+    }
 }
