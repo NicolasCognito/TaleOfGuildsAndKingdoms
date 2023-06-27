@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class FactionModel : IEntity
 {
     //faction has EventQueue
-    public EventQueueFaction EventQueue { get;}
+    public EventQueueFaction EventQueue { get; }
 
     //constructor
     public FactionModel()

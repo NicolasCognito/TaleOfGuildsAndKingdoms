@@ -48,5 +48,25 @@ public class EventQueueGlobal
             //try to execute the event
             events[i].CallEvent();
         }
-    }    
+    }
+
+    public void MergeQueues()
+    {
+        //get faction controller instance
+        FactionsController factionsController = FactionsController.Instance;
+
+        //get all factions queues
+        List<EventQueueFaction> queues = factionsController.GetAllFactionsQueues();
+
+        //iterate through the queues
+        foreach (EventQueueFaction factionQueue in queues)
+        {
+            //add events to the faction queue
+            AddEvents(factionQueue.Events);
+        }
+
+        //sort the events by priority
+        events.Sort((x, y) => x.Priority.CompareTo(y.Priority));
+
+    }   
 }

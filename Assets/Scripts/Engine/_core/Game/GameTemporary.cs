@@ -6,6 +6,21 @@ using UnityEngine;
 //it is used to test the turn and event system
 public class GameTemporary : MonoBehaviour
 {
-    //initiate game world (create only two guilds and one province)
 
+    void Start()
+    {
+        //create first guild
+        GuildModel guild1 = new GuildModel("Battle Trolls Clan");
+        //create second guild
+        GuildModel guild2 = new GuildModel("The Order of the Holy Light");
+
+        //call test event
+        guild1.TestEventQueue();
+        guild2.TestEventQueue();
+        guild2.TestEventQueue();
+
+        //start active phase
+        GamePhasesManager.StartActivePhase();
+       
+    }
 }

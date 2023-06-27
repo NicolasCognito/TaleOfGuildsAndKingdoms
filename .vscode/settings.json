@@ -1,4 +1,4 @@
-﻿{
+{
     "files.exclude":
     {
         "**/.DS_Store":true,
@@ -52,5 +52,23 @@
         "ProjectSettings/":true,
         "temp/":true,
         "Temp/":true
-    }
+    },
+    "favorites.resources": [
+        {
+            "filePath": "Assets\\Scripts\\Engine\\_core\\Game\\GameTemporary.cs",
+            "group": "Default"
+        },
+        {
+            "filePath": "Assets\\Scripts\\Engine\\_core\\Event\\EventModel.cs",
+            "group": "Default"
+        },
+        {
+            "filePath": "Assets\\Scripts\\Engine\\Factions\\Guild\\GuildModel.cs",
+            "group": "Default"
+        },
+        {
+            "filePath": "Assets\\Scripts\\Engine\\_core\\Game\\FactionsController.cs",
+            "group": "Default"
+        }
+    ]
 }

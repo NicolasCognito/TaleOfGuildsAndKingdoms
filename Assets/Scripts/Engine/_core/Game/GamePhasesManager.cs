@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// GamePhasesManager is a static class that manages the game phases
+// should be singleton?
 public static class GamePhasesManager
 {
     private static EventQueueGlobal eventQueue;
@@ -18,12 +20,20 @@ public static class GamePhasesManager
 
     public static void StartActivePhase()
     {
-        // Perform any necessary initialization for the active phase
+        // Get the global event queue
+        eventQueue = EventQueueGlobal.Instance;
 
-        // Example: Create an instance of EventQueue
-        eventQueue = new EventQueueGlobal();
+        
 
         // Example: Add events to the event queue based on player decisions or game state
+
+        
+
+        //merge events from all factions
+        eventQueue.MergeQueues();
+
+        //debug
+        Debug.Log("About to execute events, count: " + eventQueue.events.Count);
         
         // Execute the events in the event queue
         eventQueue.ExecuteEvents();
