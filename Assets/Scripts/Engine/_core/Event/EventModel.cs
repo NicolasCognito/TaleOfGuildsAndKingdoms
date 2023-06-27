@@ -44,4 +44,15 @@ public class EventModel
         Condition = condition;
         Execute = execute;
     }
+
+    //constructor (from scriptable object)
+    public EventModel(EventScriptable scriptable)
+    {
+        // set the priority
+        _priority = scriptable.Priority;
+
+        // set the delegates
+        Condition = scriptable.Condition;
+        Execute = scriptable.Execute;
+    }
 }

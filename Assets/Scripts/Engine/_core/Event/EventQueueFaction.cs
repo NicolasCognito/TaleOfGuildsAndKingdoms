@@ -26,4 +26,5 @@ public class EventQueueFaction
         EventQueueGlobal.Instance.AddEvents(Events);
     }
     
+    
 }
