@@ -5,6 +5,7 @@ using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "RiteOfAssassination", menuName = "Rituals/RiteOfAssassination")]
 [Serializable]
 public class RiteOfAssassination : RitualScriptable
 {
@@ -69,10 +70,10 @@ public class RiteOfAssassination : RitualScriptable
     }
 
     //slots
-    [OdinSerialize, InlineEditor]
+    [OdinSerialize,]
     private SlotTarget slotTarget;
 
-    [OdinSerialize, InlineEditor]
+    [OdinSerialize]
     private SlotAssassin slotAssassin;
 
 

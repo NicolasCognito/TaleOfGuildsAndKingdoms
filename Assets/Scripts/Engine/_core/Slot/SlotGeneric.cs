@@ -9,6 +9,7 @@ public class SlotModel<T, X>
 {
     //containment
     public T Containment { get; set; }
+    
     //primary condition method (initial verification of the entity without taking into account other slots)
     private ConditionDelegate primaryCondition;
 }

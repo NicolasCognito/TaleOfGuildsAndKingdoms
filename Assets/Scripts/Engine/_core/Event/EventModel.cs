@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class EventModel
+public class EventModel
 {
     // priority defines the order in which events are executed
     private int _priority;
@@ -14,8 +14,8 @@ public abstract class EventModel
     }
 
     // instances of delegates
-    public ConditionDelegate Condition { get; set; }
-    public ExecuteDelegate Execute { get; set; }
+    private ConditionDelegate Condition { get; set; }
+    private ExecuteDelegate Execute { get; set; }
 
     // try to execute the event
     public void CallEvent(params object[] args)
