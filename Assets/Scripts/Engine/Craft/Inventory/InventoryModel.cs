@@ -9,77 +9,75 @@ public class InventoryModel
     public FactionModel Faction { get; }
 
     //inventory should have a list of resources
-    public List<ResourceModel> Resources { get; set; }
+    private List<ResourceModel> Resources { get; }
+
+    //delta resources are the resources that are added to the inventory at the end of the turn
+    //we should not add the resources to the inventory until the end of the turn
+    private List<ResourceModel> DeltaResources { get; }
 
     //when adding new resources to the inventory, we should check if the resource of same type and quality is already present
     //if it is, we should add the quantity to the existing resource
     //if it is not, we should add the resource to the list
-    public void AddResource(ResourceModel resource)
+    public void AddResource(string resourceType, string quality, int amount, bool addToDelta = true)
     {
-        //check if the resource of same type and quality is already present
-        ResourceModel existingResource = Resources.Find(r => r.resourceType == resource.resourceType && r.quality == resource.quality);
+        AddResource(new ResourceModel(resourceType, quality, amount), addToDelta);
+    }
 
-        //if it is, we should add the quantity to the existing resource
+    public void AddResource(ResourceModel resource, bool addToDelta = true)
+    {
+        List<ResourceModel> targetList = addToDelta ? DeltaResources : Resources;
+        ResourceModel existingResource = targetList.Find(r => r.resourceType == resource.resourceType && r.quality == resource.quality);
+
         if (existingResource != null)
         {
             existingResource.amount += resource.amount;
         }
-        //if it is not, we should add the resource to the list
         else
         {
-            Resources.Add(resource);
+            targetList.Add(resource);
         }
     }
 
-    public void AddResource(string resourceType, string quality, int amount)
+    // Updated HasEnoughResources method to return a result object instead of throwing an exception
+    public (bool hasEnough, string message) HasEnoughResources(string resourceType, string quality, int amount)
+    {
+        return HasEnoughResources(new ResourceModel(resourceType, quality, amount));
+    }
+
+    public (bool hasEnough, string message) HasEnoughResources(ResourceModel request)
+    {
+        ResourceModel existingResource = Resources.Find(r => r.resourceType == request.resourceType && r.quality == request.quality);
+
+        if (existingResource != null && existingResource.amount >= request.amount)
+        {
+            return (true, "");
+        }
+        else
+        {
+            string message = $"Inventory does not have enough resources of type {request.resourceType}. "
+                            + $"Requested amount: {request.amount}, available amount: {existingResource?.amount ?? 0}";
+            return (false, message);
+        }
+    }
+
+    //get resource amount (by type and quality)
+    public int GetResourceAmount(string resourceType, string quality)
     {
         //check if the resource of same type and quality is already present
         ResourceModel existingResource = Resources.Find(r => r.resourceType == resourceType && r.quality == quality);
 
-        //if it is, we should add the quantity to the existing resource
+        //if it is, we should return the amount
         if (existingResource != null)
         {
-            existingResource.amount += amount;
+            return existingResource.amount;
         }
-        //if it is not, we should add the resource to the list
+        //if it is not, we should return 0
         else
         {
-            Resources.Add(new ResourceModel(resourceType, quality, amount));
+            return 0;
         }
     }
 
-    //Ensure that the inventory has enough resources to satisfy the request
-    public bool HasEnoughResources(ResourceModel request)
-    {
-        ResourceModel existingResource = Resources.Find(r => r.resourceType == request.resourceType && r.quality == request.quality);
-
-        if (existingResource != null)
-        {
-            return existingResource.amount >= request.amount;
-        }
-        else
-        {
-            throw new System.Exception($"Inventory does not have enough resources of type {request.resourceType}. "
-                                        +$"Requested amount: {request.amount}, available amount: {existingResource?.amount ?? 0}");
-        }
-    }
-
-    public bool HasEnoughResources(string resourceType, string quality, int amount)
-    {
-        // Check if the resource of same type and quality is already present
-        ResourceModel existingResource = Resources.Find(r => r.resourceType == resourceType && r.quality == quality);
-
-        // If it is, we should check if the amount is enough
-        if (existingResource != null)
-        {
-            return existingResource.amount >= amount;
-        }
-        // If it is not, we should return false
-        else
-        {
-            return false;
-        }
-    }
     
 
     /* don't need this for now, will uncomment if needed
@@ -123,15 +121,33 @@ public class InventoryModel
         }
     }
 
-    //contract (province to global inventory)
-    public void SendResourceToGlobalInventory(string resourceType, int resourceAmount, int turns = 1)
+    //contract creation (province to global inventory, single turn by default)
+    public void TransferResourceToGlobalInventory(string resourceType, int resourceAmount, int turns = 1)
     {
         
+    }
+
+
+    //merge inventory
+    private void MergeInventory()
+    {
+        //loop through the resources in the delta
+        foreach (var resource in DeltaResources)
+        {
+            //add the resource to the inventory
+            AddResource(resource, false);
+        }
+
+        //clear the delta resources
+        DeltaResources.Clear();
     }
 
     public InventoryModel(FactionModel faction)
     {
         Faction = faction;
         Resources = new List<ResourceModel>();
+
+        //subscribe to the end of turn event
+        //do later
     }
 }

@@ -6,7 +6,7 @@ public abstract class BuildingModel : IEntity
 {
     public virtual List<string> DefaultTags { get; set; }
 
-    public abstract bool ConstructionCondition();
+    public virtual List<AttachmentModel> Attachments { get; set; }
 
-    public abstract bool OperationalCondition();
+    public abstract bool ConstructionCondition();
 }

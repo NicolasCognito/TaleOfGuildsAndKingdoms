@@ -69,17 +69,16 @@ public class ContractManager
     public void ValidateAndExecuteContract(ContractModel contract)
     {
         // Check if the provider has enough resources
-        if (!contract.Provider.HasEnoughResources(contract.ResourceType, "", contract.ResourceAmount)) // Assuming "" is a placeholder for any quality
+        if (!contract.Provider.HasEnoughResources(contract.ResourceType, contract.Quality, contract.ResourceAmount).hasEnough) 
         {
-            throw new System.Exception($"Provider does not have enough resources of type {contract.ResourceType}. "
-                                    + $"Requested amount: {contract.ResourceAmount}, available amount: {contract.Provider.Resources.Find(r => r.resourceType == contract.ResourceType)?.amount ?? 0}");
+            throw new System.Exception($"Provider does not have enough resources of type {contract.ResourceType}. ");
         }
 
         // Remove resources from the provider
-        contract.Provider.RemoveResource(new ResourceModel(contract.ResourceType, "", contract.ResourceAmount)); // Assuming "" is a placeholder for any quality
+        contract.Provider.RemoveResource(new ResourceModel(contract.ResourceType, contract.Quality, contract.ResourceAmount)); 
 
         // Add resources to the requester
-        contract.Requester.AddResource(new ResourceModel(contract.ResourceType, "", contract.ResourceAmount)); // Assuming "" is a placeholder for any quality
+        contract.Requester.AddResource(new ResourceModel(contract.ResourceType, contract.Quality, contract.ResourceAmount));
 
         // Decrease the turns left, if applicable
         if (contract.TurnsLeft > 0)
