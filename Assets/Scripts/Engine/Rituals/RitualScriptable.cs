@@ -5,22 +5,16 @@ using Sirenix.Serialization;
 using UnityEngine;
 
 //serialize with Odin
+[CreateAssetMenu(fileName = "New Basic Ritual", menuName = "Rituals")]
 [System.Serializable]
-public abstract class RitualScriptable : SerializedScriptableObjectWithID
+public class RitualScriptable : SerializedScriptableObjectWithID
 {
+    //definition
+    [OdinSerialize]
+    public RitualDefinition definition;
 
-    //instead of list of slots, we will have separate fields for each slot in the inherited classes
-    /*
-    //list of slots
-    [OdinSerialize, ListDrawerSettings(Expanded = true)]
-    public List<SlotGenericSerialized<IEntity, RitualModel>> Slots { get; set; }
-    */
-
-    public abstract bool VerifyRitual(params object[] objects);
-
-    //constructor
-    public RitualScriptable()
+    public bool VerifyRitual(params object[] objects)
     {
-        //Slots = new List<SlotGenericSerialized<IEntity, RitualModel>>();
+        return definition.VerifyRitual(objects);
     }
 }

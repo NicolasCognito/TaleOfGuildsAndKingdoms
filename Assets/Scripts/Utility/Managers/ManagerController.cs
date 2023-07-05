@@ -23,11 +23,15 @@ public class ManagerController
     //data managers
     public static DataManager<PerkChainScriptable> PerkChainDataManager { get; private set; }
 
+    public static DataManager<RecipeScriptableObject> RecipeDataManager { get; private set; }
+
     //constructor
     private ManagerController()
     {
         //initialize data managers
         PerkChainDataManager = new DataManager<PerkChainScriptable>("Perks");
+
+        RecipeDataManager = new DataManager<RecipeScriptableObject>("Recipes");
     }
 
 
