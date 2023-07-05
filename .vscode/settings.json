@@ -61,6 +61,10 @@
         {
             "filePath": "Assets\\Scripts\\Engine\\Craft\\Craft\\RecipeScriptableObject.cs",
             "group": "Default"
+        },
+        {
+            "filePath": "Assets\\Scripts\\Engine\\Craft\\Craft\\RecipeExecutionManager.cs",
+            "group": "Default"
         }
     ]
 }

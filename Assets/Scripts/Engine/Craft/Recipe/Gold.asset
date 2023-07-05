@@ -21,7 +21,24 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  recipeName: 
-  tierStep: 0
-  convertors: []
-  laborCosts: []
+  recipeName: Fire to Water
+  tierStep: 5
+  maxTier: 0
+  convertors:
+  - inputResources: []
+    outputResources: []
+  - inputResources: []
+    outputResources: []
+  laborCosts:
+  - laborerSlots:
+    - qualification: basic
+    - qualification: basic
+  - laborerSlots:
+    - qualification: basic
+    - qualification: basic
+    - qualification: tinker
+  - laborerSlots:
+    - qualification: basic
+    - qualification: basic
+    - qualification: tinker
+    - qualification: mage

@@ -2,8 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class EventScriptable : SerializedScriptableObjectWithID
+public class EventScriptable : SerializedScriptableObjectWithID
 {
+    //definition of the event
+    [SerializeField]
+    private EventDefinition _definition;
+
+    public EventDefinition Definition
+    {
+        get => _definition;
+    }
     // priority defines the order in which events are executed
     [SerializeField] 
     private int _priority;
@@ -14,9 +22,6 @@ public abstract class EventScriptable : SerializedScriptableObjectWithID
         set => _priority = value;
     }
 
-    // abstract methods
-    public abstract bool Condition(params object[] args);
-
-    public abstract void Execute(params object[] args);
+    
 
 }

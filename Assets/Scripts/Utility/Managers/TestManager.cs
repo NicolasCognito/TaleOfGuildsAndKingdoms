@@ -22,6 +22,20 @@ public class TestManager : MonoBehaviour
             //if not null, print the data
             Debug.Log("Perk chain data: " + perkChainData.uID);
         }
+
+        //get the recipe data
+        RecipeScriptableObject recipeData = ManagerController.RecipeDataManager.GetData("IronToGold");
+
+        //if null, send a warning
+        if (recipeData == null)
+        {
+            Debug.LogWarning("Recipe data is null");
+        }
+        else
+        {
+            //if not null, print the data
+            Debug.Log("Recipe data: " + recipeData.uID);
+        }
     }
 
 }

@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 // GamePhasesManager is a static class that manages the game phases
 // should be singleton?
 public static class GamePhasesManager
 {
     private static EventQueueGlobal eventQueue;
+
+    public static UnityEvent<string> onPhaseCompleted = new UnityEvent<string>();
 
     public static void StartPlanningPhase()
     {
@@ -37,6 +40,11 @@ public static class GamePhasesManager
         
         // Execute the events in the event queue
         eventQueue.ExecuteEvents();
+
+
+        //end turn event (basic unity event)
+        onPhaseCompleted.Invoke("Active");
+
 
         // Transition to the next phase if applicable
         // Example: Transition to the next round or end the game

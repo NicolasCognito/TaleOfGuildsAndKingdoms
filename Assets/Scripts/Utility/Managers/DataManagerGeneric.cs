@@ -23,6 +23,7 @@ public class DataManager<T> where T : SerializedScriptableObjectWithID
             }
             else
             {
+                Debug.LogWarning($"Data items type {typeof(T)} has duplicate IDs");
                 Debug.LogWarning($"Duplicate ID found: {item.uID}");
             }
         }

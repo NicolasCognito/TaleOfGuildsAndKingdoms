@@ -34,20 +34,41 @@ public class EventQueueGlobal
     public void AddEvent(EventModel eventModel)
     {
         events.Add(eventModel);
+
+        // Subscribe to UnityEvent
+        eventModel.onEventCompleted.AddListener(onEventCompleted);
+    }
+
+    private void onEventCompleted()
+    {
+        // unsubscribe from the event
+        EventModel eventModel = events[0];
+        eventModel.onEventCompleted.RemoveListener(onEventCompleted);
+        
+        // Remove event from the queue
+        events.RemoveAt(0);
+
+        //if there are more events, execute next event
+        if (events.Count > 0)
+        {
+            events[0].CallEvent();
+        }
+    }
+
+    //sort events by priority
+    public void SortEvents()
+    {
+        events.Sort((x, y) => x.Priority.CompareTo(y.Priority));
     }
 
     //iterate through the queue and execute events
     public void ExecuteEvents()
     {
-        //sort the events by priority
-        events.Sort((x, y) => x.Priority.CompareTo(y.Priority));
+        //sort events by priority
+        SortEvents();
 
-        //iterate through the events
-        for (int i = 0; i < events.Count; i++)
-        {
-            //try to execute the event
-            events[i].CallEvent();
-        }
+        //call first event
+        events[0].CallEvent();
     }
 
     public void MergeQueues()
@@ -68,5 +89,5 @@ public class EventQueueGlobal
         //sort the events by priority
         events.Sort((x, y) => x.Priority.CompareTo(y.Priority));
 
-    }   
+    }
 }

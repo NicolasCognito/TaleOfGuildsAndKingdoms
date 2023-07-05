@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class InventoryModel
 {
@@ -9,11 +10,11 @@ public class InventoryModel
     public FactionModel Faction { get; }
 
     //inventory should have a list of resources
-    private List<ResourceModel> Resources { get; }
+    public List<ResourceModel> Resources { get; }
 
     //delta resources are the resources that are added to the inventory at the end of the turn
     //we should not add the resources to the inventory until the end of the turn
-    private List<ResourceModel> DeltaResources { get; }
+    public List<ResourceModel> DeltaResources { get; }
 
     //when adding new resources to the inventory, we should check if the resource of same type and quality is already present
     //if it is, we should add the quantity to the existing resource
@@ -146,8 +147,16 @@ public class InventoryModel
     {
         Faction = faction;
         Resources = new List<ResourceModel>();
+        DeltaResources = new List<ResourceModel>();
 
         //subscribe to the end of turn event
-        //do later
+        UnityAction<string> mergeInventoryAction = new UnityAction<string>(phase => {
+        if (phase == "Active") 
+            {
+            MergeInventory();
+            }
+        });
+
+        GamePhasesManager.onPhaseCompleted.AddListener(mergeInventoryAction);
     }
 }

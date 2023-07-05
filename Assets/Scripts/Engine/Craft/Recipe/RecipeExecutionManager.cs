@@ -19,9 +19,12 @@ public class RecipeExecutionManager
         this.laborPool = laborPool;
     }
 
-    public (bool canExecute, int feasibleTier) CanExecuteRecipe(RecipeScriptableObject recipe, int stacks)
+    public (bool canExecute, int feasibleTier) CanExecuteRecipe(RecipeScriptableObject recipe, ref int stacks)
     {
-        int tier = stacks % recipe.tierStep;
+        int tier = stacks / recipe.tierStep;
+
+        //debug desired tier
+        Debug.Log($"Desired tier: {tier}");
         
         while (tier >= 0)
         {
@@ -36,6 +39,9 @@ public class RecipeExecutionManager
                 if (!hasEnough)
                 {
                     resourcesAvailable = false;
+                    //debug
+                    Debug.Log($"Cannot execute recipe: {recipe.name} for {stacks} stacks at tier {tier}");
+                    Debug.Log($"Not enough resources: {inputResource.type} {inputResource.quality} {inputResource.amount * stacks}");
                     break;
                 }
             }
@@ -50,6 +56,9 @@ public class RecipeExecutionManager
             
             // If we don't have enough resources or laborers for the current tier, decrement the tier and try again.
             tier--;
+
+            //also update the number of stacks to the feasible tier
+            stacks = (tier + 1) * recipe.tierStep;
         }
         
         // If we've checked all tiers and none of them are feasible, return false and -1 for the tier.
@@ -59,13 +68,17 @@ public class RecipeExecutionManager
     public void ExecuteRecipe(RecipeScriptableObject recipe, int stacks)
     {
         //check if we can execute the recipe, and if we can, get the tier
-        var (canExecute, feasibleTier) = CanExecuteRecipe(recipe, stacks);
+        var (canExecute, feasibleTier) = CanExecuteRecipe(recipe, ref stacks);
 
         //if we can't execute the recipe, throw an exception
         if (!canExecute)
         {
-            throw new InvalidOperationException($"Cannot execute recipe: {recipe.name} for {stacks} stacks");
+            //throw new InvalidOperationException($"Cannot execute recipe: {recipe.name} for {stacks} stacks");
+            Debug.Log($"Cannot execute recipe: {recipe.name} for {stacks} stacks");
+            return;
         }
+
+        Debug.Log($"Executing recipe: {recipe.name} for {stacks} stacks at tier {feasibleTier}");
 
         //get the convertor for the feasible tier
         RecipeConvertor recipeConvertor = recipe.GetConvertorForTier(feasibleTier);
@@ -97,6 +110,8 @@ public class RecipeExecutionManager
             // If there isn't a laborer with the same qualification in the pool, or if there isn't enough of them, return false
             if (poolLaborer == null)
             {
+                //debug
+                Debug.Log($"Not enough laborers: {laborerSlot.qualification}");
                 return false;
             }
 

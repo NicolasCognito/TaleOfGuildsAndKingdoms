@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class EventModel
 {
+    public UnityEvent onEventCompleted;
+
     // priority defines the order in which events are executed
     private int _priority;
 
@@ -14,8 +17,8 @@ public class EventModel
     }
 
     // instances of delegates
-    private ConditionDelegate Condition { get; set; }
-    private ExecuteDelegate Execute { get; set; }
+    protected ConditionDelegate Condition { get; set; }
+    protected ExecuteDelegate Execute { get; set; }
 
     // try to execute the event
     public void CallEvent(params object[] args)
@@ -25,12 +28,18 @@ public class EventModel
         {
             // execute the event
             Execute?.Invoke(args);
+
+            
+            onEventCompleted.Invoke();
         }
         // otherwise
         else
         {
-            // throw an exception
-            throw new System.Exception("Event is not valid");
+            //debug log with information about the event
+            Debug.Log("Event " + Execute.Method.Name + " is no longer valid");
+
+            // call the event completed event
+            onEventCompleted.Invoke();
         }
     }
 
@@ -43,6 +52,9 @@ public class EventModel
         // set the delegates
         Condition = condition;
         Execute = execute;
+
+        //unity event
+        onEventCompleted = new UnityEvent();
     }
 
     //constructor (from scriptable object)
@@ -52,7 +64,10 @@ public class EventModel
         _priority = scriptable.Priority;
 
         // set the delegates
-        Condition = scriptable.Condition;
-        Execute = scriptable.Execute;
+        Condition = scriptable.Definition.Condition;
+        Execute = scriptable.Definition.Execute;
+
+        //unity event
+        onEventCompleted = new UnityEvent();
     }
 }

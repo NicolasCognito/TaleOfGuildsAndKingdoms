@@ -13,6 +13,10 @@ public class RecipeScriptableObject : SerializedScriptableObjectWithID
 
     //tier step 
     public int tierStep;
+
+    //max tier
+    public int maxTier;
+
     //list of convertors
     public List<RecipeConvertor> convertors = new List<RecipeConvertor>();
 

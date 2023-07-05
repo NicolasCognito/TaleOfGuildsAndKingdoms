@@ -2,12 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
+using Sirenix.OdinInspector.Editor;
 using Sirenix.Serialization;
+using Sirenix.Utilities.Editor;
+using UnityEditor;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "RiteOfAssassination", menuName = "Rituals/RiteOfAssassination")]
 [Serializable]
-public class RiteOfAssassination : RitualScriptable
+public class RiteOfAssassination : RitualDefinition
 {
     //internal classes for slots
     [Serializable]
@@ -33,11 +35,11 @@ public class RiteOfAssassination : RitualScriptable
     private class SlotAssassin : SlotGenericSerialized<IEntity, RitualModel>
     {
         //perk needed for the assassin
-        [SerializeField]
+        [OdinSerialize, DrawWithLabelOnTop]
         private string requiredPerkType;
 
         //level of the perk needed for the assassin
-        [SerializeField]
+        [OdinSerialize, DrawWithLabelOnTop]
         private int requiredPerkLevel;
 
 
