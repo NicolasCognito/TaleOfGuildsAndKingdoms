@@ -13,8 +13,8 @@ public class PerkModel
     [Sirenix.OdinInspector.ReadOnly]
     public int Level = 1;
 
-    //cost of the perk in perk points
-    public int Cost;
+    //expirience associated with this chain
+    public int Experience { get; private set; }
 
     public List<PerkCondition> Conditions;
 
@@ -37,6 +37,16 @@ public class PerkModel
         return true;
     }
 
+    // Method to increment experience after an action
+    public void IncrementExperience(int actionComplexity, int experienceGained)
+    {
+        // Calculate experience based on action complexity
+        int expToAdd = actionComplexity * experienceGained;
+        
+        // Increment experience
+        Experience += expToAdd;
+    }
+
     public PerkModel(PerkScriptable perkScriptable)
     {
         //set the ID
@@ -45,8 +55,8 @@ public class PerkModel
         //set the level
         Level = perkScriptable.Level;
 
-        //set the cost
-        Cost = perkScriptable.Cost;
+        //expirience
+        Experience = 0;
 
         //set the conditions
         Conditions = perkScriptable.Conditions;

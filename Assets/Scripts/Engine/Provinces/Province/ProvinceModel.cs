@@ -19,11 +19,11 @@ public class ProvinceModel : IEntity
     //stats block
     private int _population;
 
-    public ProvinceStatModel Magic;
+    public BalancingStatModel Magic;
 
-    public ProvinceStatModel Military;
+    public BalancingStatModel Military;
 
-    public ProvinceStatModel Prosperity;
+    public BalancingStatModel Prosperity;
 
     //loyalty is represented by dictionary of factions and their reputation among the locals
     private Dictionary<FactionModel, int> _loyalty;

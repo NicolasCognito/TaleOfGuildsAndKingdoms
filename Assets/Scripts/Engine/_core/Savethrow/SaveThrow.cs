@@ -27,4 +27,39 @@ public static class SaveThrow
         }    
         return null;
     }
+
+    //same as above with integers instead of OutputModels
+    public static string Throw(Dictionary<string, int> outputs)
+    {
+        //exclude outputs with probability 0 or less from the dictionary
+        foreach (string key in outputs.Keys)
+        {
+            if (outputs[key] <= 0)
+            {
+                outputs.Remove(key);
+            }
+        }
+
+        int totalProbability = 0;
+        foreach (string key in outputs.Keys)
+        {
+            totalProbability += outputs[key];
+        }
+
+        int random = Random.Range(0, totalProbability);
+        int currentProbability = 0;
+        foreach (string key in outputs.Keys)
+        {
+            currentProbability += outputs[key];
+            if (random < currentProbability)
+            {
+                //return the string of the output
+                return key;
+
+            }
+        }
+        
+        //if no output was selected, return -1
+        return null;
+    }
 }
