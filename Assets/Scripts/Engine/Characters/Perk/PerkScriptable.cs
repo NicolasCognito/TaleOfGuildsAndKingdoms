@@ -18,9 +18,6 @@ public class PerkScriptable : SerializedScriptableObject
     [Sirenix.OdinInspector.ReadOnly]
     public int Level;
 
-    //cost of the perk in perk points
-    public int Cost;
-
     //TODO: make it private
     [ListDrawerSettings]
     [OdinSerialize, ShowInInspector]

@@ -25,6 +25,8 @@ public class ManagerController
 
     public static DataManager<RecipeScriptableObject> RecipeDataManager { get; private set; }
 
+    public static DataManager<CombinationModel> CombinationsManager { get; private set; }
+
     //constructor
     private ManagerController()
     {
@@ -32,6 +34,8 @@ public class ManagerController
         PerkChainDataManager = new DataManager<PerkChainScriptable>("Perks");
 
         RecipeDataManager = new DataManager<RecipeScriptableObject>("Recipes");
+
+        CombinationsManager = new DataManager<CombinationModel>("Combinations");
     }
 
 

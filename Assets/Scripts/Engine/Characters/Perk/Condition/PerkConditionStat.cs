@@ -13,10 +13,10 @@ public class PerkConditionStat : PerkCondition
     public override bool CheckCondition(CharacterModel character)
     {
         //check if the character has the stat
-        if (character.Attributes.ContainsKey(Stat))
+        if (character.AttributesSet.Attributes.ContainsKey(Stat))
         {
             //check if the stat value is greater than or equal to the value
-            if (character.Attributes[Stat].Value >= Value)
+            if (character.AttributesSet.Attributes[Stat].Value >= Value)
             {
                 //return true
                 return true;

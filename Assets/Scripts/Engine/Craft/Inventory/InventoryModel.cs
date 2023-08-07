@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -10,11 +11,14 @@ public class InventoryModel
     public FactionModel Faction { get; }
 
     //inventory should have a list of resources
-    public List<ResourceModel> Resources { get; }
+    private List<ResourceModel> Resources { get; }
+
+    //Requested resources are used to validate if there are enough resources to perform all queued operations
+    private List<ResourceRequestModel> RequestedResources {get;}
 
     //delta resources are the resources that are added to the inventory at the end of the turn
     //we should not add the resources to the inventory until the end of the turn
-    public List<ResourceModel> DeltaResources { get; }
+    private List<ResourceModel> DeltaResources { get; }
 
     //when adding new resources to the inventory, we should check if the resource of same type and quality is already present
     //if it is, we should add the quantity to the existing resource
@@ -47,16 +51,24 @@ public class InventoryModel
 
     public (bool hasEnough, string message) HasEnoughResources(ResourceModel request)
     {
+        // Find the existing resource in the inventory
         ResourceModel existingResource = Resources.Find(r => r.resourceType == request.resourceType && r.quality == request.quality);
 
-        if (existingResource != null && existingResource.amount >= request.amount)
+        // Calculate the total amount of this resource that has already been requested
+        int totalRequestedAmount = RequestedResources
+        .SelectMany(r => r.ResourceRequests)
+        .Where(r => r.ResourceType == request.resourceType && r.Quality == request.quality)
+        .Sum(r => r.Amount);
+
+        // Check if the existing resource is not null and if the amount left after fulfilling all requests is enough for the new request
+        if (existingResource != null && existingResource.amount - totalRequestedAmount >= request.amount)
         {
             return (true, "");
         }
         else
         {
             string message = $"Inventory does not have enough resources of type {request.resourceType}. "
-                            + $"Requested amount: {request.amount}, available amount: {existingResource?.amount ?? 0}";
+                            + $"Requested amount: {request.amount}, available amount: {existingResource?.amount - totalRequestedAmount ?? 0}";
             return (false, message);
         }
     }
@@ -77,6 +89,53 @@ public class InventoryModel
         {
             return 0;
         }
+    }
+
+    public void AddResourceRequest(ResourceRequestModel request)
+    {
+        // Add the request to the list without checking for availability
+        RequestedResources.Add(request);
+    }
+
+    public void RemoveResourceRequest(ResourceRequestModel request)
+    {
+        // Simply remove the request from the list
+        RequestedResources.Remove(request);
+    }
+
+    public (List<string> conflicts, bool result) ValidateResourceRequests()
+    {
+        List<string> conflicts = new List<string>();
+
+        // Create a copy of the resources list to simulate resource removals
+        List<ResourceModel> simulatedResources = new List<ResourceModel>(Resources);
+
+        // Iterate over each request in the RequestedResources list
+        foreach (var request in RequestedResources)
+        {
+            // Check each individual resource request
+            foreach (var individualRequest in request.ResourceRequests)
+            {
+                // Find the corresponding resource in the simulated resources list
+                ResourceModel existingResource = simulatedResources.Find(r => r.resourceType == individualRequest.ResourceType && r.quality == individualRequest.Quality);
+
+                // If the resource exists and there's enough of it, subtract the requested amount
+                if (existingResource != null && existingResource.amount >= individualRequest.Amount)
+                {
+                    existingResource.amount -= individualRequest.Amount;
+                }
+                else
+                {
+                    // If the resource doesn't exist or there's not enough of it, add a conflict
+                    conflicts.Add($"Not enough resources of type {individualRequest.ResourceType}. Requested amount: {individualRequest.Amount}, available amount: {existingResource?.amount ?? 0}");
+                }
+            }
+        }
+
+        bool result = conflicts.Count == 0;
+
+        // Return the list of conflicts
+        return (conflicts, result);
     }
 
     
@@ -148,6 +207,7 @@ public class InventoryModel
         Faction = faction;
         Resources = new List<ResourceModel>();
         DeltaResources = new List<ResourceModel>();
+        RequestedResources = new List<ResourceRequestModel>();
 
         //subscribe to the end of turn event
         UnityAction<string> mergeInventoryAction = new UnityAction<string>(phase => {

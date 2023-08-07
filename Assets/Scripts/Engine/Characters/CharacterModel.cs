@@ -11,25 +11,15 @@ public class CharacterModel : IEntity
     public PerksTreeModel PerksTree { get; set; }
 
 
-    //stats dictionary
-    public Dictionary<string, CharacterAttributeModel> Attributes { get; set; }
+    //attributes
+    public CharacterAttributeSetModel AttributesSet { get; private set; }
 
     //constructor
-    public CharacterModel(PerksTreeModel perksTree, List<CharacterAttributeModel> attributes)
+    public CharacterModel(PerksTreeModel perksTree)
     {
-        //
-
-        //create the stats dictionary
-        Attributes = new Dictionary<string, CharacterAttributeModel>();
-
-        //loop through the stats
-        foreach (CharacterAttributeModel attribute in attributes)
-        {
-            //add the stat to the dictionary
-            Attributes.Add(attribute.AttributeType, attribute);
-        }
-
-        //create the perks tree model
+        //create attributes set model (each attribute equal to 8 by now)
+        AttributesSet = new CharacterAttributeSetModel(8, 8, 8, 8, 8, 8);
+        //the perks tree model
         PerksTree = perksTree;
 
     }

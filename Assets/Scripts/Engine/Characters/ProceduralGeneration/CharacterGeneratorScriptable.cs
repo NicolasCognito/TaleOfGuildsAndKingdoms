@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
@@ -39,10 +40,10 @@ public class CharacterGeneratorScriptable : SerializedScriptableObject
 
     private class AttributeOutputModel : OutputModel
     {
-        public CharacterAttributeModel Attribute { get; }
+        public CharacterAttribute Attribute { get; }
         public AttributeGenerator Generator { get; }
 
-        public AttributeOutputModel(CharacterAttributeModel attribute, AttributeGenerator generator) 
+        public AttributeOutputModel(CharacterAttribute attribute, AttributeGenerator generator) 
             : base(generator.AttributeType.ToString(), generator.MaxValue - attribute.Value + 1)
         {
             Attribute = attribute;
@@ -61,18 +62,32 @@ public class CharacterGeneratorScriptable : SerializedScriptableObject
     //generation process
     public CharacterModel GenerateCharacter()
     {
-        // Let's roll the attribute points
+        GenerateAttributes();
+        // Once the attributes are generated, let's generate the perks
+        // Call corresponding method from the PerkTreeGeneratorScriptable
+        PerksTreeModel perksTree = PerkTreeGenerator.GeneratePerkTreeModel(this);
+
+        // Create a new character model
+        //I'm using placeholder in the constructor for now
+        CharacterModel character = new CharacterModel(perksTree);
+
+        // Return the character
+        return character;
+    }
+
+    private void GenerateAttributes()
+    {
+        //this code should be refactored asap, for now I commented it to have a reference for the future
+        //attribute generator simply put the attributes to 8 by now
+        /* // Let's roll the attribute points
         int attributePoints = Random.Range(AttributePointsMin, AttributePointsMax);
 
         // Set all attributes to minimum value then distribute the points pseudo-randomly
-        List<CharacterAttributeModel> attributes = new List<CharacterAttributeModel>();
+        List<CharacterAttribute> attributes = new List<CharacterAttribute>();
 
         // Iterate through the attribute generators
         foreach (AttributeGenerator attributeGenerator in AttributeGenerators)
         {
-            // Create a new attribute model
-            CharacterAttributeModel attribute = new CharacterAttributeModel();
-
             // Set the attribute type
             attribute.AttributeType = attributeGenerator.AttributeType;
 
@@ -88,7 +103,7 @@ public class CharacterGeneratorScriptable : SerializedScriptableObject
         foreach (AttributeGenerator attributeGenerator in AttributeGenerators)
         {
             // Assuming you have a GetAttribute method to get an attribute model from the list by its type
-            CharacterAttributeModel attribute = GetAttribute(attributes, attributeGenerator.AttributeType);
+            CharacterAttribute attribute = GetAttribute(attributes, attributeGenerator.AttributeType);
 
             // Create a new output model for this attribute and generator
             outputs.Add(new AttributeOutputModel(attribute, attributeGenerator));
@@ -111,23 +126,14 @@ public class CharacterGeneratorScriptable : SerializedScriptableObject
 
             // Decrement attribute points
             attributePoints--;
-        }
+        } */
 
-        // Once the attributes are generated, let's generate the perks
-        // Call corresponding method from the PerkTreeGeneratorScriptable
-        PerksTreeModel perksTree = PerkTreeGenerator.GeneratePerkTreeModel(this);
-
-        // Create a new character model
-        CharacterModel character = new CharacterModel(perksTree, attributes);
-
-        // Return the character
-        return character;
     }
 
     // Function to get an attribute from the list by its type
-    CharacterAttributeModel GetAttribute(List<CharacterAttributeModel> attributes, string type)
+    CharacterAttribute GetAttribute(List<CharacterAttribute> attributes, string type)
     {
-        foreach (CharacterAttributeModel attribute in attributes)
+        foreach (CharacterAttribute attribute in attributes)
         {
             if (attribute.AttributeType == type)
             {

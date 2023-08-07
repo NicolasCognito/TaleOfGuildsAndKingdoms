@@ -65,6 +65,31 @@
         {
             "filePath": "Assets\\Scripts\\Engine\\Craft\\Craft\\RecipeExecutionManager.cs",
             "group": "Default"
+        },
+        {
+            "filePath": "Assets\\Scripts\\Engine\\Craft\\Recipe\\RecipeExecutionManager.cs",
+            "group": "Craft"
+        },
+        {
+            "filePath": "Assets\\Scripts\\Engine\\_core\\Event\\CraftRelatedEvents\\EventRecipeModel.cs",
+            "group": "Craft"
+        },
+        {
+            "filePath": "Assets\\Scripts\\Engine\\_core\\Game\\GameTemporary.cs",
+            "group": "Craft"
+        },
+        {
+            "filePath": "Assets\\Scripts\\Engine\\Craft\\Resource\\IResourceBooking.cs",
+            "group": "Craft"
+        },
+        {
+            "filePath": "Assets\\Scripts\\Engine\\Craft\\Inventory\\InventoryModel.cs",
+            "group": "Craft"
         }
-    ]
+    ],
+    "favorites.groups": [
+        "Default",
+        "Craft"
+    ],
+    "favorites.currentGroup": "Craft"
 }

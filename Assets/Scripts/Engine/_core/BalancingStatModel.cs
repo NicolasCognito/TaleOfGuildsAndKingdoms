@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ProvinceStatModel
+public class BalancingStatModel
 {
     private float _value;
     private float _positiveDelta;
@@ -17,7 +17,7 @@ public class ProvinceStatModel
 
     public float Value { get { return _value; } private set { _value = Mathf.Clamp(value, _minValue, _maxValue); } }
 
-    public ProvinceStatModel(float centralValue = 0, float limitValueModifierNegative = 0.05f, float limitValueModifierPositive = 0.05f, float centrifugalCoefficient = 0.05f)
+    public BalancingStatModel(float centralValue = 0, float limitValueModifierNegative = 0.05f, float limitValueModifierPositive = 0.05f, float centrifugalCoefficient = 0.05f)
     {
         if (centralValue < _minValue || centralValue > _maxValue)
             throw new ArgumentException($"centralValue must be between {_minValue} and {_maxValue}.");
